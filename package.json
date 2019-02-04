@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint --ext .js ."
+    "lint": "eslint js",
+    "prettier": "prettier --write js/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -34,19 +35,32 @@
   "homepage": "https://github.com/sbycrosz/react-native-credit-card-input#readme",
   "dependencies": {
     "card-validator": "^3.0.0",
-    "prop-types": "^15.6.0",
-    "react-native-flip-card": "^3.4.1",
     "lodash.compact": "^3.0.1",
     "lodash.every": "^4.6.0",
     "lodash.pick": "^4.4.0",
-    "lodash.values": "^4.3.0"
+    "lodash.values": "^4.3.0",
+    "prop-types": "^15.6.0",
+    "react-native-flip-card": "^3.4.1"
   },
   "devDependencies": {
-    "babel-eslint": "^5.0.0",
+    "babel-eslint": "^10.0.1",
+    "babel-jest": "23.6.0",
     "babel-polyfill": "^6.6.1",
     "babel-preset-react-native": "^1.8.0",
-    "eslint": "~2.2.0",
+    "eslint": "^5.10.0",
     "eslint-config-airbnb": "6.0.2",
-    "eslint-plugin-react": "^4.2.0"
+    "eslint-config-prettier": "^3.3.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-prettier": "^3.0.0",
+    "eslint-plugin-react": "^4.2.0",
+    "eslint-plugin-react-native": "^3.5.0",
+    "prettier": "^1.15.3"
+  },
+  "prettier": {
+    "parser": "babylon",
+    "printWidth": 100,
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "jsxBracketSameLine": false
   }
 }
