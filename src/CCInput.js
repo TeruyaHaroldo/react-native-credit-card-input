@@ -80,7 +80,7 @@ export default class CCInput extends Component {
       invalidColor,
       placeholderColor,
       additionalInputProps,
-      onSubmitEditing
+      onSubmitEditing,
     } = this.props;
     return (
       <View style={{ width: Dimensions.get('window').width }}>
@@ -92,7 +92,6 @@ export default class CCInput extends Component {
             keyboardType={keyboardType}
             autoCapitalise="words"
             autoCorrect={false}
-            autoComplete={false}
             style={[
               s.baseInputStyle,
               inputStyle,

@@ -12,7 +12,7 @@ import {
 
 import Icons from "./Icons";
 import CCInput from "./CCInput";
-import { InjectedProps } from './connectToState';
+import { InjectedProps } from "./connectToState";
 
 const INFINITE_WIDTH = 1000;
 
