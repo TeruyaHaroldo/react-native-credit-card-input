@@ -15,6 +15,7 @@ export const InjectedProps = {
   onBecomeValid: PropTypes.func.isRequired,
   requiresName: PropTypes.bool,
   requiresCVC: PropTypes.bool,
+  requiresTaxDocument: PropTypes.bool,
   requiresPostalCode: PropTypes.bool,
 };
 
@@ -27,6 +28,7 @@ export default function connectToState(CreditCardInput) {
       requiresName: PropTypes.bool,
       requiresCVC: PropTypes.bool,
       requiresPostalCode: PropTypes.bool,
+      requiresTaxDocument: PropTypes.bool,
       validatePostalCode: PropTypes.func,
     };
 
@@ -37,6 +39,7 @@ export default function connectToState(CreditCardInput) {
       requiresName: false,
       requiresCVC: true,
       requiresPostalCode: false,
+      requiresTaxDocument: false,
       validatePostalCode: (postalCode = '') => {
         return postalCode.match(/^\d{6}$/)
           ? 'valid'
@@ -80,12 +83,13 @@ export default function connectToState(CreditCardInput) {
     };
 
     _displayedFields = () => {
-      const { requiresName, requiresCVC, requiresPostalCode } = this.props;
+      const { requiresName, requiresCVC, requiresPostalCode, requiresTaxDocument } = this.props;
       return compact([
         'number',
         'expiry',
         requiresCVC ? 'cvc' : null,
         requiresName ? 'name' : null,
+        requiresTaxDocument ? 'taxDocument' : null,
         requiresPostalCode ? 'postalCode' : null,
       ]);
     };
@@ -98,7 +102,7 @@ export default function connectToState(CreditCardInput) {
     };
 
     _focusNextField = field => {
-      if (field === 'name') return;
+      if (field === 'taxDocument') return;
       // Should not focus to the next field after name (e.g. when requiresName & requiresPostalCode are true
       // because we can't determine if the user has completed their name or not)
 

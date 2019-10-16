@@ -6,7 +6,6 @@ import ReactNative, {
   Text,
   StyleSheet,
   ScrollView,
-  Dimensions,
   TextInput,
   ViewPropTypes,
 } from 'react-native';
@@ -58,6 +57,7 @@ export default class CreditCardInput extends Component {
       number: 'CARD NUMBER',
       expiry: 'EXPIRY',
       cvc: 'CVC/CCV',
+      taxDocument: 'TAX DOCUMENT',
       postalCode: 'POSTAL CODE',
     },
     placeholders: {
@@ -65,6 +65,7 @@ export default class CreditCardInput extends Component {
       number: '1234 5678 1234 5678',
       expiry: 'MM/YY',
       cvc: 'CVC',
+      taxDocument: 'Tax Document',
       postalCode: '34567',
     },
     inputContainerStyle: {
@@ -83,9 +84,13 @@ export default class CreditCardInput extends Component {
 
   componentDidMount = () => this._focus(this.props.focused);
 
-  componentWillReceiveProps = newProps => {
-    if (this.props.focused !== newProps.focused) this._focus(newProps.focused);
-  };
+  componentDidUpdate(prevProps) {
+    const { focused } = this.props;
+
+    if (prevProps.focused !== focused) {
+      this._focus(focused);
+    }
+  }
 
   _focus = field => {
     if (!field) return;
@@ -151,12 +156,13 @@ export default class CreditCardInput extends Component {
       cardImageFront,
       cardImageBack,
       inputContainerStyle,
-      values: { number, expiry, cvc, name, type },
+      values: { number, expiry, cvc, name, type, taxDocument },
       focused,
       allowScroll,
       requiresName,
       requiresCVC,
       requiresPostalCode,
+      requiresTaxDocument,
       cardScale,
       cardFontFamily,
       cardBrandIcons,
@@ -177,6 +183,7 @@ export default class CreditCardInput extends Component {
           number={number}
           expiry={expiry}
           cvc={cvc}
+          taxDocument={taxDocument}
         />
         <ScrollView
           ref="Form"
@@ -211,6 +218,14 @@ export default class CreditCardInput extends Component {
           {requiresName && (
             <CCInput
               {...this._inputProps('name')}
+              containerStyle={inputContainerStyle}
+              onSubmitEditing={onSubmitEditing}
+            />
+          )}
+          {requiresTaxDocument && (
+            <CCInput
+              {...this._inputProps('taxDocument')}
+              keyboardType="numeric"
               containerStyle={inputContainerStyle}
               onSubmitEditing={onSubmitEditing}
             />

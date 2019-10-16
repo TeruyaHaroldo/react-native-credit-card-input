@@ -34,6 +34,7 @@ export default class CCFieldFormatter {
         cvc: this._formatCVC(values.cvc, card),
         name: removeLeadingSpaces(values.name),
         postalCode: removeNonNumber(values.postalCode),
+        taxDocument: this._formatCpf(values.taxDocument),
       },
       this._displayedFields
     );
@@ -41,7 +42,8 @@ export default class CCFieldFormatter {
 
   _formatNumber = (number, card) => {
     const numberSanitized = removeNonNumber(number);
-    const lengthSanitized = limitLength(numberSanitized, 16);
+    const maxLength = card.lengths[card.lengths.length - 1];
+    const lengthSanitized = limitLength(numberSanitized, maxLength);
     const formatted = addGaps(lengthSanitized, card.gaps);
     return formatted;
   };
@@ -60,5 +62,17 @@ export default class CCFieldFormatter {
   _formatCVC = (cvc, card) => {
     const maxCVCLength = card.code.size;
     return limitLength(removeNonNumber(cvc), maxCVCLength);
+  };
+
+  _formatCpf = value => {
+    if (!value) {
+      return '';
+    }
+    return value
+      .replace(/\D/g, '')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d{1,2})/, '$1-$2')
+      .replace(/(-\d{2})\d+?$/, '$1');
   };
 }

@@ -1,14 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  ViewPropTypes,
-  Dimensions,
-} from 'react-native';
+import { View, Text, TextInput, StyleSheet, ViewPropTypes, Dimensions } from 'react-native';
 
 const s = StyleSheet.create({
   baseInputStyle: {
@@ -53,14 +45,6 @@ export default class CCInput extends Component {
     onSubmitEditing: () => {},
   };
 
-  componentWillReceiveProps = newProps => {
-    const { status, value, onBecomeEmpty, onBecomeValid, field } = this.props;
-    const { status: newStatus, value: newValue } = newProps;
-
-    // if (value !== '' && newValue === '') onBecomeEmpty(field);
-    // if (status !== 'valid' && newStatus === 'valid') onBecomeValid(field);
-  };
-
   focus = () => this.refs.input.focus();
 
   _onFocus = () => this.props.onFocus(this.props.field);
@@ -101,6 +85,7 @@ export default class CCInput extends Component {
                 ? { color: invalidColor }
                 : {},
             ]}
+            clearButtonMode="always"
             underlineColorAndroid={'transparent'}
             placeholderTextColor={placeholderColor}
             placeholder={placeholder}
