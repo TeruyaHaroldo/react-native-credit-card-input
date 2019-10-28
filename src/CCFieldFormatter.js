@@ -4,6 +4,7 @@ import pick from 'lodash.pick';
 import { removeNonNumber, removeLeadingSpaces } from './Utilities';
 
 const limitLength = (string = '', maxLength) => string.substr(0, maxLength);
+
 const addGaps = (string = '', gaps) => {
   const offsets = [0].concat(gaps).concat([string.length]);
 
@@ -42,8 +43,7 @@ export default class CCFieldFormatter {
 
   _formatNumber = (number, card) => {
     const numberSanitized = removeNonNumber(number);
-    const maxLength = card.lengths[card.lengths.length - 1];
-    const lengthSanitized = limitLength(numberSanitized, maxLength);
+    const lengthSanitized = limitLength(numberSanitized, 16);
     const formatted = addGaps(lengthSanitized, card.gaps);
     return formatted;
   };

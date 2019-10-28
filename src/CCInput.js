@@ -2,9 +2,21 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View, Text, TextInput, StyleSheet, ViewPropTypes, Dimensions } from 'react-native';
 
-const s = StyleSheet.create({
-  baseInputStyle: {
+const styles = StyleSheet.create({
+  container: {
+    marginLeft: 16,
+    marginRight: 16,
+  },
+  input: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#cbcbcb',
+    fontSize: 16,
+    height: 40,
     color: 'black',
+  },
+  label: {
+    color: '#333333',
+    fontSize: 12,
   },
 });
 
@@ -13,20 +25,10 @@ export default class CCInput extends Component {
     field: PropTypes.string.isRequired,
     label: PropTypes.string,
     value: PropTypes.string,
-    placeholder: PropTypes.string,
     keyboardType: PropTypes.string,
     status: PropTypes.oneOf(['valid', 'invalid', 'incomplete']),
-    containerStyle: ViewPropTypes.style,
-    inputStyle: Text.propTypes.style,
-    labelStyle: Text.propTypes.style,
-    validColor: PropTypes.string,
-    invalidColor: PropTypes.string,
-    placeholderColor: PropTypes.string,
     onFocus: PropTypes.func,
     onChange: PropTypes.func,
-    onBecomeEmpty: PropTypes.func,
-    onBecomeValid: PropTypes.func,
-    additionalInputProps: PropTypes.shape(TextInput.propTypes),
     onSubmitEditing: PropTypes.func,
   };
 
@@ -34,61 +36,37 @@ export default class CCInput extends Component {
     label: '',
     value: '',
     status: 'incomplete',
-    containerStyle: {},
-    inputStyle: {},
-    labelStyle: {},
     onFocus: () => {},
     onChange: () => {},
-    onBecomeEmpty: () => {},
-    onBecomeValid: () => {},
-    additionalInputProps: {},
     onSubmitEditing: () => {},
   };
 
-  focus = () => this.refs.input.focus();
+  focus = () => this.refs.input && this.refs.input.focus();
 
   _onFocus = () => this.props.onFocus(this.props.field);
   _onChange = value => this.props.onChange(this.props.field, value);
 
   render() {
-    const {
-      label,
-      value,
-      placeholder,
-      status,
-      keyboardType,
-      containerStyle,
-      inputStyle,
-      labelStyle,
-      validColor,
-      invalidColor,
-      placeholderColor,
-      additionalInputProps,
-      onSubmitEditing,
-    } = this.props;
+    const { label, value, status, keyboardType, onSubmitEditing } = this.props;
     return (
       <View style={{ width: Dimensions.get('window').width }}>
-        <View style={[containerStyle]}>
-          {!!label && <Text style={[labelStyle]}>{label}</Text>}
+        <View style={styles.container}>
+          {!!label && <Text style={styles.label}>{label}</Text>}
           <TextInput
             ref="input"
-            {...additionalInputProps}
             keyboardType={keyboardType}
             autoCapitalise="words"
             autoCorrect={false}
             style={[
-              s.baseInputStyle,
-              inputStyle,
-              validColor && status === 'valid'
-                ? { color: validColor }
-                : invalidColor && status === 'invalid'
-                ? { color: invalidColor }
+              styles.input,
+              status === 'valid'
+                ? { color: 'black' }
+                : status === 'invalid'
+                ? { color: '#dc2826' }
                 : {},
             ]}
             clearButtonMode="always"
-            underlineColorAndroid={'transparent'}
-            placeholderTextColor={placeholderColor}
-            placeholder={placeholder}
+            underlineColorAndroid="transparent"
             value={value}
             onFocus={this._onFocus}
             onChangeText={this._onChange}

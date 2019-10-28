@@ -1,31 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ReactNative, {
-  NativeModules,
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TextInput,
-  ViewPropTypes,
-} from 'react-native';
+import ReactNative, { NativeModules, View, StyleSheet, ScrollView } from 'react-native';
 
-import CreditCard from './CardView';
+import CardView from './CardView';
 import CCInput from './CCInput';
 import { InjectedProps } from './connectToState';
 
-const s = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
   },
   form: {
     marginTop: 20,
-  },
-  inputLabel: {
-    fontWeight: 'bold',
-  },
-  input: {
-    height: 40,
   },
 });
 
@@ -33,52 +19,22 @@ export default class CreditCardInput extends Component {
   static propTypes = {
     ...InjectedProps,
     labels: PropTypes.object,
-    placeholders: PropTypes.object,
-    labelStyle: Text.propTypes.style,
-    inputStyle: Text.propTypes.style,
-    inputContainerStyle: ViewPropTypes.style,
-    validColor: PropTypes.string,
-    invalidColor: PropTypes.string,
-    placeholderColor: PropTypes.string,
-    cardImageFront: PropTypes.number,
     cardImageBack: PropTypes.number,
-    cardScale: PropTypes.number,
-    cardFontFamily: PropTypes.string,
     cardBrandIcons: PropTypes.object,
     allowScroll: PropTypes.bool,
-    additionalInputsProps: PropTypes.objectOf(PropTypes.shape(TextInput.propTypes)),
     onSubmitEditing: PropTypes.func,
   };
 
   static defaultProps = {
-    cardViewSize: {},
     labels: {
-      name: "CARDHOLDER'S NAME",
-      number: 'CARD NUMBER',
-      expiry: 'EXPIRY',
-      cvc: 'CVC/CCV',
-      taxDocument: 'TAX DOCUMENT',
-      postalCode: 'POSTAL CODE',
-    },
-    placeholders: {
-      name: 'Full Name',
-      number: '1234 5678 1234 5678',
-      expiry: 'MM/YY',
+      name: 'Nome no Cartão',
+      number: 'Número do Cartão',
+      expiry: 'Validade',
       cvc: 'CVC',
-      taxDocument: 'Tax Document',
-      postalCode: '34567',
+      taxDocument: 'CPF do Titular',
+      postalCode: 'CEP',
     },
-    inputContainerStyle: {
-      borderBottomWidth: 1,
-      borderBottomColor: 'black',
-      marginLeft: 16,
-      marginRight: 16,
-    },
-    validColor: '',
-    invalidColor: 'red',
-    placeholderColor: 'gray',
     allowScroll: false,
-    additionalInputsProps: {},
     onSubmitEditing: () => {},
   };
 
@@ -111,51 +67,24 @@ export default class CreditCardInput extends Component {
   };
 
   _inputProps = field => {
-    const {
-      inputStyle,
-      labelStyle,
-      validColor,
-      invalidColor,
-      placeholderColor,
-      placeholders,
-      labels,
-      values,
-      status,
-      onFocus,
-      onChange,
-      onBecomeEmpty,
-      onBecomeValid,
-      additionalInputsProps,
-    } = this.props;
+    const { labels, values, status, onFocus, onChange } = this.props;
 
     return {
-      inputStyle: [s.input, inputStyle],
-      labelStyle: [s.inputLabel, labelStyle],
-      validColor,
-      invalidColor,
-      placeholderColor,
       ref: field,
       field,
 
       label: labels[field],
-      placeholder: placeholders[field],
       value: values[field],
       status: status[field],
 
       onFocus,
       onChange,
-      onBecomeEmpty,
-      onBecomeValid,
-
-      additionalInputProps: additionalInputsProps[field],
     };
   };
 
   render() {
     const {
-      cardImageFront,
       cardImageBack,
-      inputContainerStyle,
       values: { number, expiry, cvc, name, type, taxDocument },
       focused,
       allowScroll,
@@ -163,20 +92,15 @@ export default class CreditCardInput extends Component {
       requiresCVC,
       requiresPostalCode,
       requiresTaxDocument,
-      cardScale,
-      cardFontFamily,
       cardBrandIcons,
       onSubmitEditing,
     } = this.props;
 
     return (
-      <View style={s.container}>
-        <CreditCard
+      <View style={styles.container}>
+        <CardView
           focused={focused}
           brand={type}
-          scale={cardScale}
-          fontFamily={cardFontFamily}
-          imageFront={cardImageFront}
           imageBack={cardImageBack}
           customIcons={cardBrandIcons}
           name={requiresName ? name : ' '}
@@ -191,19 +115,17 @@ export default class CreditCardInput extends Component {
           keyboardShouldPersistTaps="always"
           scrollEnabled={allowScroll}
           showsHorizontalScrollIndicator={false}
-          style={s.form}
+          style={styles.form}
         >
           <CCInput
             {...this._inputProps('number')}
             keyboardType="numeric"
-            containerStyle={inputContainerStyle}
             onSubmitEditing={onSubmitEditing}
           />
 
           <CCInput
             {...this._inputProps('expiry')}
             keyboardType="numeric"
-            containerStyle={inputContainerStyle}
             onSubmitEditing={onSubmitEditing}
           />
 
@@ -211,22 +133,16 @@ export default class CreditCardInput extends Component {
             <CCInput
               {...this._inputProps('cvc')}
               keyboardType="numeric"
-              containerStyle={inputContainerStyle}
               onSubmitEditing={onSubmitEditing}
             />
           )}
           {requiresName && (
-            <CCInput
-              {...this._inputProps('name')}
-              containerStyle={inputContainerStyle}
-              onSubmitEditing={onSubmitEditing}
-            />
+            <CCInput {...this._inputProps('name')} onSubmitEditing={onSubmitEditing} />
           )}
           {requiresTaxDocument && (
             <CCInput
               {...this._inputProps('taxDocument')}
               keyboardType="numeric"
-              containerStyle={inputContainerStyle}
               onSubmitEditing={onSubmitEditing}
             />
           )}
@@ -234,7 +150,6 @@ export default class CreditCardInput extends Component {
             <CCInput
               {...this._inputProps('postalCode')}
               keyboardType="numeric"
-              containerStyle={inputContainerStyle}
               onSubmitEditing={onSubmitEditing}
             />
           )}

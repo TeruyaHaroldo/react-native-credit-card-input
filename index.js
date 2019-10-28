@@ -1,5 +1,4 @@
-import connectToState from "./src/connectToState";
-import CreditCardInput from "./src/CreditCardInput";
-import CardView from "./src/CardView";
+import connectToState from './src/connectToState';
+import CreditCardInput from './src/CreditCardInput';
 
 export default connectToState(CreditCardInput);

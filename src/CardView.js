@@ -5,10 +5,10 @@ import FlipCard from 'react-native-flip-card';
 
 import defaultIcons from './Icons';
 
-const BASE_SIZE = { width: 300, height: 190 };
+const CARD_FRONT = require('../images/card-front.png');
+const CARD_BACK = require('../images/card-back.png');
 
-const s = StyleSheet.create({
-  cardContainer: {},
+const styles = StyleSheet.create({
   cardFace: {},
   icon: {
     position: 'absolute',
@@ -21,6 +21,7 @@ const s = StyleSheet.create({
   baseText: {
     color: 'rgba(255, 255, 255, 0.8)',
     backgroundColor: 'transparent',
+    fontFamily: Platform.select({ ios: 'Courier', android: 'monospace' }),
   },
   placeholder: {
     color: 'rgba(255, 255, 255, 0.5)',
@@ -30,16 +31,16 @@ const s = StyleSheet.create({
     color: 'rgba(255, 255, 255, 1)',
   },
   number: {
-    fontSize: 21,
+    fontSize: 20,
     position: 'absolute',
     top: 95,
-    left: 28,
+    left: 24,
   },
   name: {
     fontSize: 16,
     position: 'absolute',
     bottom: 20,
-    left: 25,
+    left: 24,
     right: 100,
   },
   expiryLabel: {
@@ -66,9 +67,9 @@ const s = StyleSheet.create({
     top: 80,
     right: 30,
   },
-}); // https://github.com/yannickcr/eslint-plugin-react/issues/106
+});
 
-/* eslint react/prop-types: 0 */ export default class CardView extends Component {
+class CardView extends Component {
   static propTypes = {
     focused: PropTypes.string,
     brand: PropTypes.string,
@@ -77,10 +78,6 @@ const s = StyleSheet.create({
     expiry: PropTypes.string,
     cvc: PropTypes.string,
     placeholder: PropTypes.object,
-    scale: PropTypes.number,
-    fontFamily: PropTypes.string,
-    imageFront: PropTypes.number,
-    imageBack: PropTypes.number,
     customIcons: PropTypes.object,
   };
 
@@ -92,40 +89,18 @@ const s = StyleSheet.create({
       expiry: '••/••',
       cvc: '•••',
     },
-
-    scale: 1,
-    fontFamily: Platform.select({ ios: 'Courier', android: 'monospace' }),
-    imageFront: require('../images/card-front.png'),
-    imageBack: require('../images/card-back.png'),
   };
 
   render() {
-    const {
-      focused,
-      brand,
-      name,
-      number,
-      expiry,
-      cvc,
-      customIcons,
-      placeholder,
-      imageFront,
-      imageBack,
-      scale,
-      fontFamily,
-    } = this.props;
+    const { focused, brand, name, number, expiry, cvc, customIcons, placeholder } = this.props;
 
     const Icons = { ...defaultIcons, ...customIcons };
     const isAmex = brand === 'american-express';
     const shouldFlip = !isAmex && focused === 'cvc';
-
-    const containerSize = { ...BASE_SIZE, height: BASE_SIZE.height * scale };
-    const transform = {
-      transform: [{ scale }, { translateY: (BASE_SIZE.height * (scale - 1)) / 2 }],
-    };
+    const BASE_SIZE = { width: 300, height: 190 };
 
     return (
-      <View style={[s.cardContainer, containerSize]}>
+      <View style={BASE_SIZE}>
         <FlipCard
           style={{ borderWidth: 0 }}
           flipHorizontal
@@ -135,26 +110,24 @@ const s = StyleSheet.create({
           clickable={false}
           flip={shouldFlip}
         >
-          <ImageBackground style={[BASE_SIZE, s.cardFace, transform]} source={imageFront}>
-            <Image style={[s.icon]} source={Icons[brand]} />
+          <ImageBackground style={[BASE_SIZE, styles.cardFace]} source={CARD_FRONT}>
+            <Image style={styles.icon} source={Icons[brand]} />
             <Text
               style={[
-                s.baseText,
-                { fontFamily },
-                s.number,
-                !number && s.placeholder,
-                focused === 'number' && s.focused,
+                styles.baseText,
+                styles.number,
+                !number && styles.placeholder,
+                focused === 'number' && styles.focused,
               ]}
             >
               {!number ? placeholder.number : number}
             </Text>
             <Text
               style={[
-                s.baseText,
-                { fontFamily },
-                s.name,
-                !name && s.placeholder,
-                focused === 'name' && s.focused,
+                styles.baseText,
+                styles.name,
+                !name && styles.placeholder,
+                focused === 'name' && styles.focused,
               ]}
               numberOfLines={1}
             >
@@ -162,22 +135,20 @@ const s = StyleSheet.create({
             </Text>
             <Text
               style={[
-                s.baseText,
-                { fontFamily },
-                s.expiryLabel,
-                s.placeholder,
-                focused === 'expiry' && s.focused,
+                styles.baseText,
+                styles.expiryLabel,
+                styles.placeholder,
+                focused === 'expiry' && styles.focused,
               ]}
             >
               MÊS/ANO
             </Text>
             <Text
               style={[
-                s.baseText,
-                { fontFamily },
-                s.expiry,
-                !expiry && s.placeholder,
-                focused === 'expiry' && s.focused,
+                styles.baseText,
+                styles.expiry,
+                !expiry && styles.placeholder,
+                focused === 'expiry' && styles.focused,
               ]}
             >
               {!expiry ? placeholder.expiry : expiry}
@@ -185,20 +156,24 @@ const s = StyleSheet.create({
             {isAmex && (
               <Text
                 style={[
-                  s.baseText,
-                  { fontFamily },
-                  s.amexCVC,
-                  !cvc && s.placeholder,
-                  focused === 'cvc' && s.focused,
+                  styles.baseText,
+                  styles.amexCVC,
+                  !cvc && styles.placeholder,
+                  focused === 'cvc' && styles.focused,
                 ]}
               >
                 {!cvc ? placeholder.cvc : cvc}
               </Text>
             )}
           </ImageBackground>
-          <ImageBackground style={[BASE_SIZE, s.cardFace, transform]} source={imageBack}>
+          <ImageBackground style={[BASE_SIZE, styles.cardFace]} source={CARD_BACK}>
             <Text
-              style={[s.baseText, s.cvc, !cvc && s.placeholder, focused === 'cvc' && s.focused]}
+              style={[
+                styles.baseText,
+                styles.cvc,
+                !cvc && styles.placeholder,
+                focused === 'cvc' && styles.focused,
+              ]}
             >
               {!cvc ? placeholder.cvc : cvc}
             </Text>
@@ -208,3 +183,5 @@ const s = StyleSheet.create({
     );
   }
 }
+
+export default CardView;
