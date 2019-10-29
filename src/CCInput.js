@@ -12,11 +12,14 @@ const styles = StyleSheet.create({
     borderBottomColor: '#cbcbcb',
     fontSize: 16,
     height: 40,
+    lineHeight: 25,
+    paddingBottom: 0,
     color: 'black',
   },
   label: {
     color: '#333333',
     fontSize: 12,
+    marginBottom: -4,
   },
 });
 
