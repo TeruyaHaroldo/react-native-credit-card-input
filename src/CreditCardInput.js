@@ -69,14 +69,22 @@ export default class CreditCardInput extends Component {
   _inputProps = field => {
     const { labels, values, status, onFocus, onChange } = this.props;
 
+    const placeholder = {
+      name: '',
+      number:
+        '\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022',
+      expiry: 'Mês/Ano',
+      cvc: '\u2022\u2022\u2022',
+      taxDocument: '\u2022\u2022\u2022.\u2022\u2022\u2022.\u2022\u2022\u2022-\u2022\u2022\u2022',
+    };
+
     return {
       ref: field,
       field,
-
       label: labels[field],
       value: values[field],
       status: status[field],
-
+      placeholder: placeholder[field],
       onFocus,
       onChange,
     };

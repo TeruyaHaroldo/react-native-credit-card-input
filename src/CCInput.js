@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, TextInput, StyleSheet, ViewPropTypes, Dimensions } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Dimensions } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
@@ -28,6 +28,7 @@ export default class CCInput extends Component {
     field: PropTypes.string.isRequired,
     label: PropTypes.string,
     value: PropTypes.string,
+    placeholder: PropTypes.string,
     keyboardType: PropTypes.string,
     status: PropTypes.oneOf(['valid', 'invalid', 'incomplete']),
     onFocus: PropTypes.func,
@@ -39,6 +40,7 @@ export default class CCInput extends Component {
     label: '',
     value: '',
     status: 'incomplete',
+    placeholder: '',
     onFocus: () => {},
     onChange: () => {},
     onSubmitEditing: () => {},
@@ -50,7 +52,7 @@ export default class CCInput extends Component {
   _onChange = value => this.props.onChange(this.props.field, value);
 
   render() {
-    const { label, value, status, keyboardType, onSubmitEditing } = this.props;
+    const { label, value, status, keyboardType, onSubmitEditing, placeholder } = this.props;
     return (
       <View style={{ width: Dimensions.get('window').width }}>
         <View style={styles.container}>
@@ -58,6 +60,7 @@ export default class CCInput extends Component {
           <TextInput
             ref="input"
             keyboardType={keyboardType}
+            placeholder={placeholder}
             autoCapitalise="words"
             autoCorrect={false}
             style={[
